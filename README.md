@@ -1,3 +1,2 @@
-## WenssonS blog
-
-Papers, codes, datasets and sth else about Recommendation System.
+## 推荐系统学习笔记
+[个人博客](https://wenssons.github.io)还在构建中...
