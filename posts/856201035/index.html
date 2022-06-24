@@ -24,7 +24,7 @@
 <meta property="og:description" content="不得不说，用hexo与github创建个人博客真的是好上手。不过在实际建立博客以及修改主题的时候也遇到了不少的坑，不如第一篇文章就从记录hexo开始吧！ 1 hexo前置配置1.1 Node.js与Git安装hexo之前需要先安装Node.js和Git，然后可以使用node.js的包管理工具npm来安装hexo： 1$ npm install -g hexo-cli  具体Node.js的版本">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-10-22T13:25:38.000Z">
-<meta property="article:modified_time" content="2022-06-24T11:56:35.479Z">
+<meta property="article:modified_time" content="2022-06-24T12:00:09.485Z">
 <meta property="article:author" content="WenssonS">
 <meta property="article:tag" content="hexo">
 <meta name="twitter:card" content="summary_large_image">
@@ -372,13 +372,14 @@
 <h2 id="3-4-hexo主题更换"><a href="#3-4-hexo主题更换" class="headerlink" title="3.4 hexo主题更换"></a>3.4 hexo主题更换</h2><p>大部分hexo主题的更换在操作上并不复杂，只需要git clone相应的主题文件夹，然后放入themes文件夹中，接着修改<code>_config.yml</code>中的<code>theme</code>的值即可使用，相关配置可见各主题的文档。但是在诸如<code>npm install</code>及各种配置地方，极易遇到各种问题与Bug。建议使用有详细文档说明的主题，调试起来比较方便。</p>
 <p>我所比较喜欢的主题有：Butterfly，Fluid，huxblog，diaspora，Keep，Clean，BeanTech。目前使用的Fluid，其文档见<a target="_blank" rel="noopener" href="https://fluid-dev.github.io/hexo-fluid-docs/guide/">这里</a>。</p>
 <h2 id="3-5-hexo文件夹迁移"><a href="#3-5-hexo文件夹迁移" class="headerlink" title="3.5 hexo文件夹迁移"></a>3.5 hexo文件夹迁移</h2><p>hexo文件夹在迁移时，可以直接将原来的hexo文件夹整个复制到新的博客文件夹下，移动前目标文件夹需要通过命令<code>hexo init &lt;folder&gt;</code>进行过初始化。</p>
-<h1 id="4-坑点"><a href="#4-坑点" class="headerlink" title="4 坑点"></a>4 坑点</h1><ol>
+<h1 id="4-坑点记录"><a href="#4-坑点记录" class="headerlink" title="4 坑点记录"></a>4 坑点记录</h1><ol>
 <li>初次使用hexo的时候，可能会搞不清楚资源存放在哪个目录下。source文件夹下默认只有<code>_posts</code>文件夹用于存放各个post页面，但是诸如其他page以及图片文件夹需要自己手动创建，比如存放在source&#x2F;img文件夹下的图片才会被<code>hexo g</code>生成到<code>public/img</code>文件夹下面。如果图片等资源直接放在<code>public</code>文件夹下，则每次<code>hexo clean</code>的时候会被清除掉。</li>
 <li>建议在<code>hexo s</code>启动localhost的情况下进行调试，能够在本地快速地查看结果。<code>hexo g &amp;&amp; hexo d</code>最好是用来进行网页的实际更新，它存在三个问题：1）命令执行起来比较耗时；2）网页更新响应比较慢，不如<code>hexo s</code>基本可以在本地实时查看变动；3）如果不是在无痕模式下浏览，则之前访问时留下的缓存数据会影响后续网页更新。因此每次在执行命令后需要清除缓存，隔一段时间才能看到更新后的网页。</li>
 <li><code>npm install</code>时经常会碰到安装失败的问题，需要反复试验是否有设置镜像或者梯子。</li>
 <li>如果更换主题后，显示错误<code>extends includes/layout.pug block content include ./includes/mixins/post-ui.pug #recent-posts.recent-posts +postUI include includes/pagination.pug</code>，请见该<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/aa936a8369fb">博客</a>。</li>
 <li>博客目录下的配置文件中，需要配置git。如果在<code>hexo d</code>的过程中卡住，则大概率需要配置git代理，以加速与github的连接。如果显示authentication失败，并提示<code>Please use a personal access token instead.</code>，则需要配置github的<code>Personal access tokens</code>，github已于2021.08.13停止使用密码验证git。</li>
 <li>如果<code>hexo d</code>报错<code>ERROR Deployer not found: git</code>，则需在博客目录下安装相应插件<code>npm install hexo-deployer-git --save</code>。</li>
+<li>如果在<code>hexo init &lt;folder&gt;</code>或者<code>hexo d</code>等涉及到git的过程中，遇到类似如下类型的错误，则是网络问题导致的，需要进行网络故障排查，或设置github代理：<figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs roboconf">fatal: unable to access &#x27;https://github.com/WenssonS/WenssonS.github.io.git/&#x27;: Failed to connect to github.com port 443: Connection refused<br>FATAL &#123;<br>  <span class="hljs-attribute">err</span>: Error: Spawn failed<br>      at ChildProcess.&lt;anonymous&gt; (E:\blog\node_modules\hexo-util\lib\spawn<span class="hljs-variable">.js</span>:51:21)<br>      at ChildProcess<span class="hljs-variable">.emit</span> (node:events:390:28)<br>      at ChildProcess<span class="hljs-variable">.cp</span><span class="hljs-variable">.emit</span> (E:\blog\node_modules\cross-spawn\lib\enoent<span class="hljs-variable">.js</span>:34:29)<br>      at Process<span class="hljs-variable">.ChildProcess</span><span class="hljs-variable">._handle</span><span class="hljs-variable">.onexit</span> (node:internal/child_process:290:12) &#123;<br>    code: 128<br>  &#125;<br>&#125; Something&#x27;s wrong. Maybe you can find the solution here: %s https://hexo<span class="hljs-variable">.io</span>/docs/troubleshooting<span class="hljs-variable">.html</span><br></code></pre></td></tr></table></figure></li>
 </ol>
 
               
