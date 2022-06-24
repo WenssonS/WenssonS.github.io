@@ -1,0 +1,815 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/avatar_img.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="WenssonS">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1 numpy基本理解numpy库是现在python生态中最广为使用的基础数学计算工具库，能够用来存储和计算大型矩阵和多维度数组，它针对数组计算提供了大量的数学函数库，相比于python原生list，numpy计算在内存和时间上的开销都要小很多。 numpy基本上与python生态中其他所有主流的数据处理和机器学习工具库都有联系，如pandas、scipy、sklearn和pytorch等深度">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解和使用numpy">
+<meta property="og:url" content="http://example.com/posts/130345454/index.html">
+<meta property="og:site_name" content="WenssonS&#39;s Zone">
+<meta property="og:description" content="1 numpy基本理解numpy库是现在python生态中最广为使用的基础数学计算工具库，能够用来存储和计算大型矩阵和多维度数组，它针对数组计算提供了大量的数学函数库，相比于python原生list，numpy计算在内存和时间上的开销都要小很多。 numpy基本上与python生态中其他所有主流的数据处理和机器学习工具库都有联系，如pandas、scipy、sklearn和pytorch等深度">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/post/numpy/ndarray_memory.png">
+<meta property="article:published_time" content="2021-12-07T08:08:57.000Z">
+<meta property="article:modified_time" content="2022-04-19T05:04:36.000Z">
+<meta property="article:author" content="WenssonS">
+<meta property="article:tag" content="data process">
+<meta property="article:tag" content="numpy">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/post/numpy/ndarray_memory.png">
+  
+  
+  <title>理解和使用numpy - WenssonS&#39;s Zone</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":4},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="WenssonS's Zone" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WenssonS&#39;s Zone</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archive
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Category
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tag
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/wallpaper.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="理解和使用numpy"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-12-07 16:08" pubdate>
+          2021年12月7日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="data process"
+        id="heading-1dd81546d5be9315dd11dcaec5e506a0" role="tab" data-toggle="collapse" href="#collapse-1dd81546d5be9315dd11dcaec5e506a0"
+        aria-expanded="true"
+      >
+        data process
+        <span class="list-group-count">(2)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-1dd81546d5be9315dd11dcaec5e506a0"
+           role="tabpanel" aria-labelledby="heading-1dd81546d5be9315dd11dcaec5e506a0">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/posts/368754817/" title="scipy踩坑"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">scipy踩坑</span>
+        </a>
+      
+    
+      
+      
+        <a href="/posts/130345454/" title="理解和使用numpy"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">理解和使用numpy</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">理解和使用numpy</h1>
+            
+            <div class="markdown-body">
+              
+              <!-- toc -->
+
+<h1 id="1-numpy基本理解"><a href="#1-numpy基本理解" class="headerlink" title="1 numpy基本理解"></a>1 numpy基本理解</h1><p>numpy库是现在python生态中最广为使用的基础数学计算工具库，能够用来存储和计算大型矩阵和多维度数组，它针对数组计算提供了大量的数学函数库，相比于python原生list，numpy计算在内存和时间上的开销都要小很多。</p>
+<p>numpy基本上与python生态中其他所有主流的数据处理和机器学习工具库都有联系，如pandas、scipy、sklearn和pytorch等深度学习框架，这些工具库或者框架都拥有一套自己的数据结构，而这些数据结构大多是在numpy基础上进行扩展，能够兼容numpy并且都能跟numpy互相转化。</p>
+<p>numpy中的基本元素是ndarray（n dimensional array，n维数组，也称为一个array），ndarray可以将同一类型的元素存储成多个维度，其中每一维度被称为一个axis，并有一定的长度length。如ndarray<code>[[0., 1., 2.],[3., 4., 5.]]</code>有2个维度，长度分别为2和3。一个ndarray含有如下常用API：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; import numpy as np</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a = np.array([[1,2,3],[4,5,6]])</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a.ndim  <span class="hljs-comment"># 有几个维度</span></span><br>2<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a.shape  <span class="hljs-comment"># 有几个维度，每个维度长度多少</span></span><br>(2, 3)<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a.size  <span class="hljs-comment"># 元素数量</span></span><br>6<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a.dtype  <span class="hljs-comment"># 元素类型</span></span><br>dtype(&#x27;int32&#x27;)<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a.itemsize  <span class="hljs-comment"># 元素占几个字节</span></span><br>4<br></code></pre></td></tr></table></figure>
+
+<h1 id="2-使用ndarray"><a href="#2-使用ndarray" class="headerlink" title="2 使用ndarray"></a>2 使用ndarray</h1><h2 id="2-1-创建ndarray"><a href="#2-1-创建ndarray" class="headerlink" title="2.1 创建ndarray"></a>2.1 创建ndarray</h2><p>numpy提供了多种创建ndarray的方法。<br><code>np.array()</code>是最基本的方法，接受一个list作为参数，元素类型与list中的元素类型一致。如果list中有多个元素类型，则按照complex&gt;float&gt;int&gt;bool的优先级进行类型的转化（True和False会分别转化成1.和0.）<br>除了np.array，numpy还提供了多种创建ndarray的API，这些API接受一个shape或者ndarray作为参数，数据类型默认为float64，可以在构造函数中用dtype指定类型常用API如下:</p>
+<ul>
+<li><code>np.zeros()</code>，<code>np.zeros_like()</code>：元素全为0</li>
+<li><code>np.ones()</code>，<code>np.ones_like()</code>：元素全为1</li>
+<li><code>np.empty()</code>，<code>np.empty_like()</code>：随机初始化元素，值取决于内存状态</li>
+<li><code>np.arange()</code>，<code>np.linspace()</code>：创建一个序列，前者可以指定两个元素间隔的值，后者指定序列长度</li>
+<li><code>np.eye()</code>：创建对角矩阵</li>
+<li><code>np.diag()</code>：创建对角矩阵或者提取对角线的元素形成一个ndarray</li>
+</ul>
+<h2 id="2-2-数据类型"><a href="#2-2-数据类型" class="headerlink" title="2.2 数据类型"></a>2.2 数据类型</h2><p>numpy所支持的数据类型要比python内置类型多很多，基本可以与C的数据类型对应，常用类型如下：</p>
+<ul>
+<li>bool：布尔类型</li>
+<li>int8，int16，int32，int64：有符号整数，后面的值表示占多少字节</li>
+<li>uint8，uint16，uint32，uint64：无符号整数，后面的值表示占多少字节</li>
+<li>float16，float32，float64，float128：分别是半精度、单精度（float）、双精度（double）和扩展精度的浮点数</li>
+<li>object：python对象</li>
+<li>complex64，complex128，complex256：分别由两个float32、float64、float128描述的复数</li>
+</ul>
+<p>在创建ndarray的时候，即可以通过赋值<code>dtype</code>来指定ndarray的数据类型。也可以在运行时，使用<code>astype()</code>方法来改变一个ndarray的数据类型，不过该方法并不会直接修改原数据类型。</p>
+<h2 id="2-3-打印"><a href="#2-3-打印" class="headerlink" title="2.3 打印"></a>2.3 打印</h2><p>一般用<code>print()</code>就可以打印一个ndarray，不过ndarray过大的话，只会显示部分元素，这时可以使用<code>np.set_printoptions(threshold=sys.maxsize)</code>强制打印完全。</p>
+<h2 id="2-4-数学运算"><a href="#2-4-数学运算" class="headerlink" title="2.4 数学运算"></a>2.4 数学运算</h2><p>在numpy中基本的数学运算是element-wise的，并且会创建一个新的ndarray。如加（<code>+</code>）、减（<code>-</code>）、乘（<code>*</code>）、幂（<code>**</code>）、比较符（<code>&lt;</code>等）。特别注意，矩阵乘法使用<code>@</code>或者<code>ndarray.dot()</code>。<br>而如<code>+=</code>、<code>*=</code>这种操作符，会直接改变原有ndarray的值，而非创建一个新的ndarray，即操作是in-place的。<br>同<code>np.array()</code>一样，如果运算中碰到了多种不同类型的元素，则会按照complex&gt;float&gt;int&gt;bool的优先级进行类型的转化。</p>
+<p>以上运算都是涉及到多个ndarray的多元运算，在调用API的时候一般是以np为句柄。只涉及到一个ndarray的一元运算或者操作，则句柄基本都是ndarray本身，并且运算会作用到ndarray中每一个元素上，如<code>sum()</code>，<code>min()</code>，<code>max()</code>，<code>mean()</code>，<code>exp()</code>，<code>sqrt()</code>，<code>sin()</code>，<code>cos()</code>，<code>argmax()</code>，<code>argmin()</code>，<code>sort()</code>，<code>floor()</code>，<code>ceil()</code>等。</p>
+<h2 id="2-5-索引、切片"><a href="#2-5-索引、切片" class="headerlink" title="2.5 索引、切片"></a>2.5 索引、切片</h2><h3 id="2-5-1-基本的索引和切片操作"><a href="#2-5-1-基本的索引和切片操作" class="headerlink" title="2.5.1 基本的索引和切片操作"></a>2.5.1 基本的索引和切片操作</h3><p>对于一维ndarray，其索引方式与python中的list完全相同。</p>
+<p>对于多维ndarray，也可以像多维list那样进行索引或者切片，但是更常用的一种方式是传入一个tuple对所有维进行索引或者切片：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; import numpy as np</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a = np.array([[1,2,3],[4,5,6]])</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a[1][0]  <span class="hljs-comment"># 按照list的方式索引</span></span><br>4<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a[1, 0]  <span class="hljs-comment"># 推荐使用的索引方式</span></span><br>4<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a[0, :2]  <span class="hljs-comment"># 切片</span></span><br>array([1, 2])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a[:1]  <span class="hljs-comment"># 如果后面的维度被省略，则选取所有的元素</span></span><br>array([[1, 2, 3]])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a[..., :2]  <span class="hljs-comment"># 如果想省略前面的维度，则使用...</span></span><br>array([[1, 2],<br>       [4, 5]])<br></code></pre></td></tr></table></figure>
+
+<p>索引的时候可以指定newaxis（其值实际为None）来扩展一个新的维度：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; import numpy as np</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; from numpy import newaxis</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a = np.array([[1,2,3],[4,5,6]])</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a[newaxis]</span><br>array([[[1, 2, 3],<br>        [4, 5, 6]]])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a[newaxis].shape</span><br>(1, 2, 3)<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a[None].shape</span><br>(1, 2, 3)<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-5-2-使用数组索引"><a href="#2-5-2-使用数组索引" class="headerlink" title="2.5.2 使用数组索引"></a>2.5.2 使用数组索引</h3><p>除了通过切片为每个维度划定一个范围进行索引外，有时候我们还希望能够直接按下标索引到一批元素，这时候可以通过数组进行索引：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a = np.arange(10)</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; i = np.array([0,0,3,5,9])</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a[i]</span><br>array([0, 0, 3, 5, 9])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; i = np.array([[2, 3], [4, 5]])</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a[i]</span><br>array([[2, 3],<br>       [4, 5]])<br></code></pre></td></tr></table></figure>
+
+<p>如果被索引的ndarray是多维的，进行索引的ndarray只有一个，那么它只能索引索引到原ndarray的第一个维度：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a = np.arange(10).reshape(5, 2)</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a</span><br>array([[0, 1],<br>       [2, 3],<br>       [4, 5],<br>       [6, 7],<br>       [8, 9]])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; i = np.array([[0, 4], [1, 2]])</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a[i]</span><br>array([[[0, 1],<br>        [8, 9]],<br><br>       [[2, 3],<br>        [4, 5]]])<br></code></pre></td></tr></table></figure>
+
+<p>因此如果对多维ndarray进行索引，那么需要使用多个用来索引的ndarray：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; j = np.array([[0, 1],[1, 1]])</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a[i, j]</span><br>array([[0, 9],<br>       [3, 5]])<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-5-3-mask索引"><a href="#2-5-3-mask索引" class="headerlink" title="2.5.3 mask索引"></a>2.5.3 mask索引</h3><p>在机器学习中，还有一种常用的索引方式是mask索引，即通过True和False来索引相应的元素：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a = np.arange(12).reshape(3, 4)</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a</span><br>array([[ 0,  1,  2,  3],<br>       [ 4,  5,  6,  7],<br>       [ 8,  9, 10, 11]])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; b = a &gt; 4</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a[b]</span><br>array([ 5,  6,  7,  8,  9, 10, 11])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a[b] = 0</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a</span><br>array([[0, 1, 2, 3],<br>       [4, 0, 0, 0],<br>       [0, 0, 0, 0]])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a = np.arange(12).reshape(3,4)</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; np.where(a&gt;4, 0, 1)  <span class="hljs-comment"># 使用np.where进行索引并赋新值</span></span><br>array([[1, 1, 1, 1],<br>       [1, 0, 0, 0],<br>       [0, 0, 0, 0]])<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-5-4-其他有关方法"><a href="#2-5-4-其他有关方法" class="headerlink" title="2.5.4 其他有关方法"></a>2.5.4 其他有关方法</h3><p>numpy提供了一些API能够根据不同的条件来提取符合条件的元素下标：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a = np.arange(12).reshape(3, 4)</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a</span><br>array([[ 0,  1,  2,  3],<br>       [ 4,  5,  6,  7],<br>       [ 8,  9, 10, 11]])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a.nonzero()  <span class="hljs-comment"># 获取非0元素的下标</span></span><br>(array([0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2], dtype=int64), array([1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3], dtype=int64))<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; np.where(a&gt;3)  <span class="hljs-comment"># 获取符合条件的元素的下标</span></span><br>(array([1, 1, 1, 1, 2, 2, 2, 2], dtype=int64), array([0, 1, 2, 3, 0, 1, 2, 3], dtype=int64))<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; np.where(a&gt;3, 0, 1)  <span class="hljs-comment"># 依据条件进行修改</span></span><br>array([[1, 1, 1, 1],<br>       [0, 0, 0, 0],<br>       [0, 0, 0, 0]])<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-6-shape相关"><a href="#2-6-shape相关" class="headerlink" title="2.6 shape相关"></a>2.6 shape相关</h2><h3 id="2-6-1-改变shape"><a href="#2-6-1-改变shape" class="headerlink" title="2.6.1 改变shape"></a>2.6.1 改变shape</h3><p>一个ndarray的shape由<code>shape</code>返回，可以通过<code>reshape()</code>、<code>ravel()</code>、<code>transpose()</code>操作改变ndarray的shape，不过这种改变不是in-place的，而是返回了一个新的指定shape的ndarray，如果要在原有ndarray上改变shape则需要<code>resize()</code>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; import numpy as np</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a = np.array([[1,2,3],[4,5,6]])</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a.reshape(3, 2)  <span class="hljs-comment"># 返回一个新的ndarray</span></span><br>array([[1, 2],<br>       [3, 4],<br>       [5, 6]])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a.ravel()  <span class="hljs-comment"># 返回一个新的一维ndarray</span></span><br>array([1, 2, 3, 4, 5, 6])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a.T  <span class="hljs-comment"># 转置</span></span><br>array([[1, 4],<br>       [2, 5],<br>       [3, 6]])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a.transpose()  <span class="hljs-comment"># 转置</span></span><br>array([[1, 4],<br>       [2, 5],<br>       [3, 6]])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a.resize(3, 2)  <span class="hljs-comment"># 修改原有ndarray</span></span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a</span><br>array([[1, 2],<br>       [3, 4],<br>       [5, 6]])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a.reshape(2, -1)  <span class="hljs-comment"># -1表示该维度的大小由numpy自动计算</span></span><br>array([[1, 2, 3],<br>       [4, 5, 6]])<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-6-2-拼接多个narray"><a href="#2-6-2-拼接多个narray" class="headerlink" title="2.6.2 拼接多个narray"></a>2.6.2 拼接多个narray</h3><p>最灵活的方法是<code>np.concatenate()</code>，可以将多个ndarray按照指定axis进行拼接。<code>np.vstack()</code>和<code>np.hstack()</code>则是分别将多个ndarray在一维和二维上进行拼接，被拼接的ndarray可以是一维、二维或者多维的。考虑二维的情形，v即vertical，h即horizontal。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs shell">import numpy as np<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a = np.zeros((3, 4))</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; b = np.ones((3, 4))</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; np.concatenate((a, b), axis=0)  <span class="hljs-comment"># 在指定维度上进行拼接</span></span><br>array([[0., 0., 0., 0.],<br>       [0., 0., 0., 0.],<br>       [0., 0., 0., 0.],<br>       [1., 1., 1., 1.],<br>       [1., 1., 1., 1.],<br>       [1., 1., 1., 1.]])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; np.vstack((a, b))  <span class="hljs-comment"># 在一维上进行拼接</span></span><br>array([[0., 0., 0., 0.],<br>       [0., 0., 0., 0.],<br>       [0., 0., 0., 0.],<br>       [1., 1., 1., 1.],<br>       [1., 1., 1., 1.],<br>       [1., 1., 1., 1.]])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; np.hstack((a, b))  <span class="hljs-comment"># 在二维上进行拼接</span></span><br>array([[0., 0., 0., 0., 1., 1., 1., 1.],<br>       [0., 0., 0., 0., 1., 1., 1., 1.],<br>       [0., 0., 0., 0., 1., 1., 1., 1.]])<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-6-3-拆分一个ndarray"><a href="#2-6-3-拆分一个ndarray" class="headerlink" title="2.6.3 拆分一个ndarray"></a>2.6.3 拆分一个ndarray</h3><p>与拼接类似，拆分也有三种操作，分别对应于<code>array_split()</code>，<code>vsplit()</code>，<code>hsplit()</code>，这里不再赘述。</p>
+<h1 id="3-numpy的主要机制"><a href="#3-numpy的主要机制" class="headerlink" title="3 numpy的主要机制"></a>3 numpy的主要机制</h1><h2 id="3-1-拷贝机制"><a href="#3-1-拷贝机制" class="headerlink" title="3.1 拷贝机制"></a>3.1 拷贝机制</h2><h3 id="3-1-1-ndarray的内存结构"><a href="#3-1-1-ndarray的内存结构" class="headerlink" title="3.1.1 ndarray的内存结构"></a>3.1.1 ndarray的内存结构</h3><p>一个ndarray对象封装了如下信息：</p>
+<ul>
+<li>dtype：数据类型</li>
+<li>ndim：有几个维度</li>
+<li>shape：ndarray各维度的长度</li>
+<li>strides：维间距，在当前维到达下一个连续的元素所需要前进的字节数</li>
+<li>data：指针，指向原始数据的内存区域</li>
+</ul>
+<p>这里借鉴一个网图来具体展示ndarray的内存结构：<br><img src="/img/post/numpy/ndarray_memory.png" srcset="/img/loading.gif" lazyload alt="ndarray内存结构"></p>
+<p>以上所有的数据都被称为元数据，也是一个ndarray实际所包含的信息。由data一项可以看到一个ndarray对象和原始数据是分开的，在只考虑data的情况下，ndarray对象本身相当于指针或者引用，而它所指向的东西即为存储的原始数据。因此实际的数据分布和我们看到的数据分布是不一样的，我们在对数据进行reshape这导致在numpy中进行拷贝会涉及多种情况。</p>
+<h3 id="3-1-2-ndarray中拷贝的三种情况"><a href="#3-1-2-ndarray中拷贝的三种情况" class="headerlink" title="3.1.2 ndarray中拷贝的三种情况"></a>3.1.2 ndarray中拷贝的三种情况</h3><p>numpy中的引用实际上应该是一个多级关系：变量名-&gt;ndarray对象-&gt;数据，因此拷贝应该存在如下三种情况：</p>
+<ul>
+<li>赋值操作<code>=</code>不会对ndarray对象进行任何的复制，不会进行任何对象的创建，即使<code>=</code>之后我们有两个变量名，他们本质上是完全一样的。从python语言角度考虑，变量名本身也是一种引用，因此这其实属于浅拷贝。</li>
+<li><code>view()</code>操作实际上是返回了一个新的ndarray对象，但是新的ndarray与原来的ndarray共享同一份原始数据。这其实也是浅拷贝，只不过跟<code>=</code>的区别是两个变量名所指向的ndarray对象不一样，但是数据本身是一样的，因此是浅拷贝。一个ndarray的数据发生改变后，另一个ndarray的数据也会随之变化。同样地，在用切片或<code>reshape()</code>等操作时，也会返回一个ndarray对象的浅拷贝，虽然看着是一个新数组，但是数据实际是同一份数据。</li>
+<li>而<code>copy()</code>则好理解很多，它会同时拷贝ndarray对象和实际的数据，是深拷贝，两个变量名指向的是不同的ndarray对象，存储的也是两份不同的数据，一个ndarray发生变化，另一个不会发生变化。</li>
+</ul>
+<p>numpy官方文档里将上述三种情况分别称为“No Copy at All”、“View or Shallow Copy”和“Deep Copy”，官方文档的相关叙述可见<a target="_blank" rel="noopener" href="https://numpy.org/devdocs/user/quickstart.html#copies-and-views">这里</a>。</p>
+<h2 id="3-2-广播机制"><a href="#3-2-广播机制" class="headerlink" title="3.2 广播机制"></a>3.2 广播机制</h2><p>在实际应用中，常常会碰到shape不一样的ndarray参与一个element-wise的运算，这种运算实际上是有意义的，为了使不同shape的ndarray能够直接进行运算，需要用到广播机制。</p>
+<p>同拷贝机制一样，广播机制也是numpy中重要的机制之一，并且都被pytorch等框架所继承和采纳。广播机制有如下两个原则：</p>
+<ul>
+<li>如果参与运算的ndarray的shape不一致，则维数比较少的ndarray会反复添加一个长度为1的维度，直到两者拥有一样多的维度；</li>
+<li>如果有的维度长度不一样且某些ndarray在该维度上的长度为1，则这些ndarray会在长度为1的维度上进行复制，并与最长的维度保持一致。</li>
+</ul>
+<p>广播机制完成后，所有参与运算的ndarray的shape一定是相同的。以下是一个简单的示例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; import numpy as np</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a = np.array([[0,0,0],[1,1,1],[2,2,2]])</span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; b = np.array([1,2,3])  <span class="hljs-comment"># 第一个原则</span></span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a</span><br>array([[0, 0, 0],<br>       [1, 1, 1],<br>       [2, 2, 2]])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; b</span><br>array([1, 2, 3])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a + b  <span class="hljs-comment"># 第一个原则</span></span><br>array([[1, 2, 3],<br>       [2, 3, 4],<br>       [3, 4, 5]])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; b = np.array([[1],[2],[3]])  <span class="hljs-comment"># 第二个原则</span></span><br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; a + b  <span class="hljs-comment"># 第二个原则</span></span><br>array([[1, 1, 1],<br>       [3, 3, 3],<br>       [5, 5, 5]])<br></code></pre></td></tr></table></figure>
+
+<h1 id="4-ndarray与matrix"><a href="#4-ndarray与matrix" class="headerlink" title="4 ndarray与matrix"></a>4 ndarray与matrix</h1><p>ndarray可以是多维的，而matrix则如它的名字一样只能是个二维的矩阵，可以通过<code>np.mat()</code>方法进行构建。matrix继承自ndarray，因此会有很多相通的方法和属性。</p>
+<h2 id="4-1-两者的不同"><a href="#4-1-两者的不同" class="headerlink" title="4.1 两者的不同"></a>4.1 两者的不同</h2><p>在使用上，两者的区别主要体现在矩阵乘法上。两者的<code>dot()</code>都是矩阵乘法，<code>multiply()</code>都是逐元素相乘，但是matrix的<code>*</code>表示矩阵相乘，而ndarray的<code>*</code>表示逐元素相乘。此外，ndarray的<code>@</code>表示矩阵相乘。</p>
+<p>scipy.org推荐使用ndarray，并且ndarray的应用更为广泛，众多方法的返回值也都是返回ndarray。</p>
+<h2 id="4-2-互相转化"><a href="#4-2-互相转化" class="headerlink" title="4.2 互相转化"></a>4.2 互相转化</h2><p>ndarray通过<code>asmatrix()</code>转成matrix，matrix通过<code>A</code>属性或<code>asarray()</code>转成ndarray。</p>
+<p>需要注意的是，以上转化方法都是浅拷贝。</p>
+<h1 id="5-numpy相关IO"><a href="#5-numpy相关IO" class="headerlink" title="5 numpy相关IO"></a>5 numpy相关IO</h1><h2 id="5-1-加载和保存ndarray"><a href="#5-1-加载和保存ndarray" class="headerlink" title="5.1 加载和保存ndarray"></a>5.1 加载和保存ndarray</h2><p>numpy提供了一系列方法来加载和保存ndarray对象：</p>
+<ul>
+<li><code>np.savetxt()</code>将ndarray保存到文本文件，如<code>.txt</code>或<code>.csv</code></li>
+<li><code>np.loadtxt()</code>从文本文件加载ndarray</li>
+<li><code>np.genfromtxt()</code>也是从文本文件中加载数据，并且可以对缺失值进行处理，相比于loadtxt更慢，但是功能更完备</li>
+<li><code>np.save()</code>将ndarray保存到<code>.npy</code>文件</li>
+<li><code>np.load()</code>从<code>.npy</code>，<code>.npz</code>或者<code>pickle</code>文件加载ndarray</li>
+<li><code>np.savez()</code>将ndarray保存到<code>.npz</code>文件</li>
+</ul>
+<p><code>.npy</code>和<code>.npz</code>文件除了保存原始数据，还会保存shape和dtype等信息，以确保能够完整重构ndarray。</p>
+<h2 id="5-2-与其他类型的数据进行转换"><a href="#5-2-与其他类型的数据进行转换" class="headerlink" title="5.2 与其他类型的数据进行转换"></a>5.2 与其他类型的数据进行转换</h2><h3 id="5-2-1-与python的list互转"><a href="#5-2-1-与python的list互转" class="headerlink" title="5.2.1 与python的list互转"></a>5.2.1 与python的list互转</h3><p><code>np.array()</code>将一个list转成ndarray，<code>tolist()</code>将一个ndarray转成list。</p>
+<h3 id="5-2-2-与pandas的DataFrame和Series互转"><a href="#5-2-2-与pandas的DataFrame和Series互转" class="headerlink" title="5.2.2 与pandas的DataFrame和Series互转"></a>5.2.2 与pandas的DataFrame和Series互转</h3><p>在pandas中，一个Series实际上是个一维数组，而一个DataFrame实际上是个二维数组，但是它们都可以存储异构的数据。</p>
+<p>Series可以通过<code>as_matrix()</code>转换成ndarray。DataFrame的方式比较多，可以通过<code>as_matrix()</code>、<code>values</code>或者<code>np.array()</code>将其转换成ndarray。</p>
+<p>而ndarray则可以分别通过Series和DataFrame的构造函数转换成这两种数据类型。</p>
+<h3 id="5-2-3-与scipy的稀疏矩阵互转"><a href="#5-2-3-与scipy的稀疏矩阵互转" class="headerlink" title="5.2.3 与scipy的稀疏矩阵互转"></a>5.2.3 与scipy的稀疏矩阵互转</h3><p><code>scipy.sparse</code>提供了多种稀疏矩阵，如<code>coo_matrix</code>和<code>csr_matrix</code>，它们可以通过<code>toarray()</code>方法或属性<code>A</code>转换成ndarray，也可以通过<code>todense()</code>转成matrix。</p>
+<p>ndarray可以通过稀疏矩阵的构造函数直接构造稀疏矩阵。</p>
+<h3 id="5-2-4-与pytorch的tensor互转"><a href="#5-2-4-与pytorch的tensor互转" class="headerlink" title="5.2.4 与pytorch的tensor互转"></a>5.2.4 与pytorch的tensor互转</h3><p>pytorch中的tensor可通过<code>torch.from_numpy()</code>，根据ndarray构造tensor。</p>
+<p>tensor转ndarray稍微有点复杂，最简单的情况是<code>numpy()</code>将一个tensor转成ndarray。不过存在两种例外：1）如果一个tensor需要grad，则需要先调用<code>detach()</code>将该tensor分离出计算图，再执行<code>numpy()</code>；2）如果一个tensor在GPU上，则需要先调用<code>cpu()</code>将该tensor移动到cpu上，再执行<code>numpy()</code>。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a target="_blank" rel="noopener" href="https://numpy.org/">numpy官方文档</a></p>
+<p><a target="_blank" rel="noopener" href="https://numpy123.com/">numpy中文文档</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.scipy.org/doc/numpy-1.17.0/reference/arrays.html">scipy中的numpy文档</a></p>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/data-process/" class="category-chain-item">data process</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/data-process/">#data process</a>
+      
+        <a href="/tags/numpy/">#numpy</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/368754817/" title="scipy踩坑">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">scipy踩坑</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/2730100556/" title="markdown踩坑">
+                        <span class="hidden-mobile">markdown踩坑</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        MathJax = {
+          tex    : {
+            inlineMath: { '[+]': [['$', '$']] }
+          },
+          loader : {
+            load: ['ui/lazy']
+          },
+          options: {
+            renderActions: {
+              findScript    : [10, doc => {
+                document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                  const display = !!node.type.match(/; *mode=display/);
+                  const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                  const text = document.createTextNode('');
+                  node.parentNode.replaceChild(text, node);
+                  math.start = { node: text, delim: '', n: 0 };
+                  math.end = { node: text, delim: '', n: 0 };
+                  doc.math.push(math);
+                });
+              }, '', false],
+              insertedScript: [200, () => {
+                document.querySelectorAll('mjx-container').forEach(node => {
+                  let target = node.parentNode;
+                  if (target.nodeName.toLowerCase() === 'li') {
+                    target.parentNode.classList.add('has-jax');
+                  }
+                });
+              }, '', false]
+            }
+          }
+        };
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.0/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
