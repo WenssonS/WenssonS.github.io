@@ -1,7 +1,7 @@
+http://example.com/posts/1246173879/
 http://example.com/posts/26532/
 http://example.com/posts/undefined/
 http://example.com/posts/856201035/
-http://example.com/posts/1246173879/
 http://example.com/posts/130345454/
 http://example.com/posts/368754817/
 http://example.com/posts/1090588111/
@@ -14,14 +14,14 @@ http://example.com/about/index.html
 http://example.com/
 http://example.com/tags/hexo/
 http://example.com/tags/markdown/
-http://example.com/tags/scipy/
-http://example.com/tags/data-process/
 http://example.com/tags/machine-learning/
 http://example.com/tags/deep-learning/
+http://example.com/tags/scipy/
+http://example.com/tags/data-process/
 http://example.com/tags/recommendation/
 http://example.com/tags/numpy/
 http://example.com/categories/hexo/
 http://example.com/categories/markdown/
-http://example.com/categories/data-process/
 http://example.com/categories/deep-learning/
+http://example.com/categories/data-process/
 http://example.com/categories/recommendation/
